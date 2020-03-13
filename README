@@ -38,3 +38,8 @@ instance of tabbed.
 [0] http://tools.suckless.org/dmenu
 [1] http://tools.suckless.org/tabbed
 
+---------------------
+
+For using search engines use `?` instead of `space`:
+e.g:
+`surf "d?suckless tools"` search `suckless tools` in `duckduckgo`.
