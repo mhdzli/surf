@@ -1,11 +1,25 @@
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
-static char *scriptfile     = "~/.surf/script.js";
-static char *styledir       = "~/.surf/styles/";
-static char *certdir        = "~/.surf/certificates/";
-static char *cachedir       = "~/.surf/cache/";
-static char *cookiefile     = "~/.surf/cookies.txt";
+static char *scriptfile     = "~/.local/share/surf/script.js";
+static char *styledir       = "~/.local/share/surf/styles/";
+static char *certdir        = "~/.local/share/surf/certificates/";
+static char *cachedir       = "~/.local/share/surf/cache/";
+static char *cookiefile     = "~/.local/share/surf/cookies.txt";
+
+static SearchEngine searchengines[] = {
+	{ "d",		"https://duckduckgo.com/?q=%s" },
+	{ "i",		"https://duckduckgo.com/?q=%s&atb=v1-1&t=h_&iar=images" },
+	{ "yt",		"https://yewtu.be/search?q=%s" },
+	{ "w",		"https://www.wikipedia.org/search-redirect.php?family=wikipedia&language=en&search=%s&language=en&go=Go" },
+	{ "osm",	"https://www.openstreetmap.org/search?query=%s" },
+	{ "lib",	"http://gen.lib.rus.ec/search.php?req=%s&lg_topic=libgen&open=0&view=simple&res=25&phrase=0&column=def" },
+	{ "aw",		"https://wiki.archlinux.org/index.php?search=%s&title=Special%3ASearch" },
+	{ "rbg",	"https://www.rarbgproxy.com/torrents.php?search=%s" },
+	{ "pb",		"https://pirateproxy.app/s/?q=%s&=on&page=0&orderby=99" },
+	{ "wt",		"https://www.wiktionary.org/search-redirect.php?family=wiktionary&language=en&search=%s&go=Go" },
+};
+
 
 /* Webkit default features */
 /* Highest priority value will be used.
@@ -70,7 +84,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define SETPROP(r, s, p) { \
         .v = (const char *[]){ "/bin/sh", "-c", \
              "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
-             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" && cat ~/.surf/bookmarks)\" " \
+             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" && cat ~/.local/share/surf/bookmarks)\" " \
              "| dmenu -l 10 -p \"$4\" -w $1)\" && " \
              "xprop -id $1 -f $3 8s -set $3 \"$prop\"", \
              "surf-setprop", winid, r, s, p, NULL \
@@ -107,9 +121,9 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define BM_ADD(r) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
              "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
-             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.surf/bookmarks) " \
-             "| awk '!seen[$0]++' > ~/.surf/bookmarks.tmp && " \
-             "mv ~/.surf/bookmarks.tmp ~/.surf/bookmarks", \
+             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.local/share/surf/bookmarks) " \
+             "| awk '!seen[$0]++' > ~/.local/share/surf/bookmarks.tmp && " \
+             "mv ~/.local/share/surf/bookmarks.tmp ~/.local/share/surf/bookmarks", \
              winid, r, NULL \
         } \
 }
